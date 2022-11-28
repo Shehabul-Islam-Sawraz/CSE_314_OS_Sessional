@@ -1,6 +1,6 @@
 #!/bin/bash
 
-(( $# < 1 )) && echo "Usage script1.sh filename1 filename2 ..." && exit 1
+(( $# < 1 )) && echo "Usage: script1.sh filename1 filename2 ..." && exit 1
 
 for file in "$@"
 do
