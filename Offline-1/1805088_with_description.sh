@@ -16,6 +16,7 @@ echo "students_id, score" > output.csv
 copyChecker(){
 	for (( x=$1+1;x<=max_student_id;x++ )) ; do
 		if [ -e "out$x.sh" ] && ( diff -w -s -q -B "out$1.sh" "out$x.sh" &>/dev/null); then
+			#(( numbers[$x] > 0 )) && (( numbers[$x]=-$max_score )); (( numbers[$1] > 0 )) && (( numbers[$1]=-$max_score )); rm "out$x.sh"
 			(( numbers[x] > 0 )) && (( numbers[x]=-numbers[x] )); (( numbers[$1] > 0 )) && (( numbers[$1]=-numbers[$1] )); rm "out$x.sh"
 			
 		fi
@@ -47,17 +48,23 @@ checkOutput(){
 
 checkCopy(){
 	for j in "${!numbers[@]}"; do
-	  	if (( ${numbers[$j]} > 0 )); then
+	  	if (( ${numbers[$j]} > 0 )); then # Verifies that sh file exists
+	  		#copyChecker $j
 	  		checkOutput $j
 	  	fi
 	done
 	for j in "${!numbers[@]}"; do
-	  	if [ -e "out$j.sh" ]; then
+		#if [ -e "out$j.sh" ] && (( ${numbers[$j]} > 0 )); then
+	  	if [ -e "out$j.sh" ]; then # Verifies that sh file exists
+	  		#checkOutput $j
 	  		copyChecker $j
 		  	rm "out$j.sh"
+		#elif [ -e "out$j.sh" ] && (( ${numbers[$j]} < 0 )); then
+		#	rm "out$j.sh"
 	  	fi
 	done 
 }
+
 
 resultIntoCSV(){
 	for (( x=1; x<=max_student_id; x++ )); do
