@@ -39,8 +39,8 @@ traverseFiles(){
 }
 
 checkOutput(){
-	(bash "out$1.sh") > out.txt
-	x=$(diff -w out.txt AcceptedOutput.txt | grep -c "^[<>]"); (( x=max_score-x*5 ))
+	(bash "out$1.sh") > out.txt  # Creating out.txt with the output of the passed student_id having student's shell file
+	x=$(diff -w out.txt AcceptedOutput.txt | grep -c "^[<>]"); (( x=max_score-x*5 ))  # Getting no of lines in diff staring with < or >
 	if (( x <=0 )); then
 		numbers[$1]=0
 	else
@@ -49,19 +49,19 @@ checkOutput(){
 }
 
 checkCopy(){
-	for j in "${!numbers[@]}"; do
+	for j in "${!numbers[@]}"; do  # Traversing 'numbers' array
 	  	if (( ${numbers[$j]} > 0 )); then # Verifies that sh file exists
-	  		#copyChecker $j
-	  		checkOutput $j
+	  		#copyChecker $j  		# If running copy checker first, uncomment this line 
+	  		checkOutput $j			# If running output check first, uncomment this line
 	  	fi
 	done
 	for j in "${!numbers[@]}"; do
-		#if [ -e "out$j.sh" ] && (( ${numbers[$j]} > 0 )); then
-	  	if [ -e "out$j.sh" ]; then # Verifies that sh file exists
-	  		#checkOutput $j
-	  		copyChecker $j
+		#if [ -e "out$j.sh" ] && (( ${numbers[$j]} > 0 )); then			# If running copy checker first, uncomment this line
+	  	if [ -e "out$j.sh" ]; then # Verifies that sh file exists		# If running output check first, uncomment this line
+	  		#checkOutput $j     	# If running copy checker first, uncomment this line
+	  		copyChecker $j			# If running output check first, uncomment this line and next line. Either comment both this and next line.
 		  	rm "out$j.sh"
-		#elif [ -e "out$j.sh" ] && (( ${numbers[$j]} < 0 )); then
+		#elif [ -e "out$j.sh" ] && (( ${numbers[$j]} < 0 )); then		# If running copy checker first, uncomment this and next line	
 		#	rm "out$j.sh"
 	  	fi
 	done 
@@ -70,7 +70,7 @@ checkCopy(){
 
 resultIntoCSV(){
 	for (( x=1; x<=max_student_id; x++ )); do
-		echo "${filenames[$x]}, ${numbers[$x]}" >> output.csv
+		echo "${filenames[$x]}, ${numbers[$x]}" >> output.csv  # Appending filenames and numbers in csv file.
 	done	
 	rm out.txt
 }

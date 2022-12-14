@@ -2,6 +2,7 @@
 
 changeExtension(){
 	file=$1
+	# ${file%.*} to get the filename without the extension and ${file##*.} to get the extension alone
 	if [[ ${file##*.} = "cpp" ]]  # ${var##Pattern} Remove from $var the longest part of $Pattern that matches the front end of $var.
 	then
 		x=${file%.*}  # ${var%Pattern} Remove from $var the shortest part of $Pattern that matches the back end of $var.
