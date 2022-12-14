@@ -48,6 +48,10 @@ checkOutput(){
 	fi
 }
 
+# numbers['key']='value' to set value
+# "${numbers[@]}" to expand the values
+# "${!numbers[@]}" (notice the !) to expand the keys
+
 checkCopy(){
 	for j in "${!numbers[@]}"; do  # Traversing 'numbers' array
 	  	if (( ${numbers[$j]} > 0 )); then # Verifies that sh file exists
