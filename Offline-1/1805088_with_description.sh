@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Check no of arguments and set max_score & max_student_id based on that
 if (( $# > 2 )); then
 	echo "Invalid number of arguments. Please provide at most 2 arguments. Usage: ./script.sh max_score max_student_id" && exit 1
 elif (( $# == 0 )); then
@@ -10,15 +11,16 @@ else
 	max_score=$1; max_student_id=$2
 fi
 
-numbers=(); filenames=()
+numbers=(); filenames=()  # Arrays for storing numbers of students and their filenames
 echo "students_id, score" > output.csv
 
 copyChecker(){
 	for (( x=$1+1;x<=max_student_id;x++ )) ; do
-		if [ -e "out$x.sh" ] && ( diff -w -s -q -B "out$1.sh" "out$x.sh" &>/dev/null); then
-			#(( numbers[$x] > 0 )) && (( numbers[$x]=-$max_score )); (( numbers[$1] > 0 )) && (( numbers[$1]=-$max_score )); rm "out$x.sh"
-			(( numbers[x] > 0 )) && (( numbers[x]=-numbers[x] )); (( numbers[$1] > 0 )) && (( numbers[$1]=-numbers[$1] )); rm "out$x.sh"
-			
+		if [ -e "out$x.sh" ] && ( diff -w -s -q -B "out$1.sh" "out$x.sh" &>/dev/null); then  # Checking if a output file for a student exists or not and comparing
+																							 # it with given AcceptedOutput file. '&>/dev/null' is basically 
+																							 # nullifying all the warnings or text generated in diff command
+			#(( numbers[$x] > 0 )) && (( numbers[$x]=-$max_score )); (( numbers[$1] > 0 )) && (( numbers[$1]=-$max_score )); rm "out$x.sh"  # If running copy checker first, uncomment this line
+			(( numbers[x] > 0 )) && (( numbers[x]=-numbers[x] )); (( numbers[$1] > 0 )) && (( numbers[$1]=-numbers[$1] )); rm "out$x.sh"  # If running outputs check first, uncomment this line
 		fi
 	done
 }
@@ -27,11 +29,11 @@ traverseFiles(){
 	for (( x=1; x<=max_student_id; x++ )); do	
 		folder="$1/180512$x"; file="$folder/180512$x.sh"
 		filenames[$x]=$(basename -- "$folder")
-		if [ -e "$folder" ] && [ -e "$file" ]; then
+		if [ -e "$folder" ] && [ -e "$file" ]; then  # Checks if folder in student_id format match or not! If match then whether student_id.sh exists in that folder!
 			cat "$file" > "out$x.sh"
-			numbers[$x]=$max_score
+			numbers[$x]=$max_score  # If sh file exists then set default number of student to max_score
 		else
-			numbers[$x]=0
+			numbers[$x]=0	# If sh file doesn't exists then set default number of student to 0
 		fi
 	done
 }
