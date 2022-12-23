@@ -168,6 +168,7 @@ freeproc(struct proc *p)
   p->chan = 0;
   p->killed = 0;
   p->xstate = 0;
+  p->trace_id = -1;
   p->state = UNUSED;
 }
 
@@ -601,6 +602,16 @@ kill(int pid)
     release(&p->lock);
   }
   return -1;
+}
+
+int
+trace(int pid)
+{
+  if(pid < 0){
+    return -1;
+  }
+  myproc()->trace_id = pid;
+  return 0;
 }
 
 void
