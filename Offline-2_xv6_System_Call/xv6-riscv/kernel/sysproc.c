@@ -98,3 +98,10 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// Prints amount of free memory and no of existing processes
+uint64
+sys_sysinfo(void)
+{
+  return sysinfo();
+}
