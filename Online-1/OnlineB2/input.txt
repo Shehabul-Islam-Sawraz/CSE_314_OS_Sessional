@@ -1,0 +1,13 @@
+12
+open a.txt
+open b.txt
+open c.txt
+append 0 hello
+append 1 hello
+append 2 hello
+close a.txt
+close c.txt
+open c.txt
+open a.txt
+append 0 c
+append 2 a
