@@ -36,7 +36,7 @@ void *generate_requests_loop(void *data)
       if(item_to_produce >= total_items) {
 	break;
       }
- 
+  
       buffer[curr_buf_size++] = item_to_produce;
       print_produced(item_to_produce, thread_id);
       item_to_produce++;
