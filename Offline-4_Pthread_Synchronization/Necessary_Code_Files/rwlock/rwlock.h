@@ -8,7 +8,13 @@ using namespace std;
 
 struct read_write_lock
 {
-
+    unsigned int writer_threads;
+    unsigned int reader_threads;
+    unsigned int waiting_writer_threads;
+    unsigned int waiting_reader_threads;
+    pthread_mutex_t mutex_lock;
+    pthread_cond_t cond_read_wait;
+    pthread_cond_t cond_write_wait;
 };
 
 void InitalizeReadWriteLock(struct read_write_lock * rw);
