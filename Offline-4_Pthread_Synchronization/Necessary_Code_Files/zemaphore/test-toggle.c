@@ -4,7 +4,6 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
-#include <wait.h>
 #include <pthread.h>
 
 #define NUM_THREADS 3

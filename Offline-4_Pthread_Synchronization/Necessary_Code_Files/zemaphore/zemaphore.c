@@ -4,7 +4,6 @@
 #include <string.h>
 #include <errno.h>
 #include <signal.h>
-#include <wait.h>
 #include "zemaphore.h"
 
 void zem_init(zem_t *s, int value) {
