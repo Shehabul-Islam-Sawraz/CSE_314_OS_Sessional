@@ -33,8 +33,8 @@ void ReaderUnlock(struct read_write_lock * rw) {
     rw->reader_threads--;
 
     // If this is the last read thread, so it is mandatory that reader_threads_waiting = 0
-	  // because otherwise they would have already entered.
-	  // So, if there are any waiting writer threads, we would just wake one of them up
+	// because otherwise they would have already entered.
+	// So, if there are any waiting writer threads, we would just wake one of them up
     if(rw->reader_threads == 0 && rw->waiting_writer_threads > 0) {
         pthread_cond_signal(&rw->cond_write_wait);
     }

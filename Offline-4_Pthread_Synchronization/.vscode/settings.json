@@ -2,6 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "string.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "algorithm": "cpp"
     }
 }
