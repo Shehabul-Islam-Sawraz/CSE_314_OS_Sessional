@@ -63,6 +63,9 @@ void            ramdiskrw(struct buf*);
 void*           kalloc(void);
 void            kfree(void *);
 void            kinit(void);
+void 			add_ref(void *);
+int  			alloc_COW(pagetable_t, uint64);
+int 			is_unallocated_COW(pagetable_t, uint64);
 
 // log.c
 void            initlog(int, struct superblock*);

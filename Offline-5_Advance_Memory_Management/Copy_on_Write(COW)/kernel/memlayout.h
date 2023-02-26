@@ -55,6 +55,11 @@
 // each surrounded by invalid guard pages.
 #define KSTACK(p) (TRAMPOLINE - ((p)+1)* 2*PGSIZE)
 
+// Macros to handle reference count of a physical address
+#define PG2REFIDX(_pa) ((((uint64)_pa) - KERNBASE)/PGSIZE) // Here, 4096 is PGSIZE(using macro gives error)
+#define MX_PGIDX PG2REFIDX(PHYSTOP)
+#define PG_REFCNT(_pa) pg_refcnt[PG2REFIDX((_pa))]
+
 // User memory layout.
 // Address zero first:
 //   text

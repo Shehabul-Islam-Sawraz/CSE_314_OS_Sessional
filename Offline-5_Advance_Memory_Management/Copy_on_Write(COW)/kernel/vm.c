@@ -314,7 +314,7 @@ int uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   pte_t *pte;
   uint64 pa, i;
   uint flags;
-  char *mem;
+  // char *mem;
 
   for (i = 0; i < sz; i += PGSIZE)
   {
@@ -324,14 +324,31 @@ int uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
       panic("uvmcopy: page not present");
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
-    if ((mem = kalloc()) == 0)
-      goto err;
-    memmove(mem, (char *)pa, PGSIZE);
-    if (mappages(new, i, PGSIZE, (uint64)mem, flags) != 0)
-    {
-      kfree(mem);
+
+    if (flags & PTE_W){ // If PTE write is enabled, only then we will enable COW
+      // Clearing PTE_W(PTE Writeable) in the PTEs of both child and parent, as now PTEs will be not writeable
+      flags &= (~PTE_W);
+      // Adding PTE_COW to represent this is a COW page
+      flags |= PTE_COW;
+    }
+
+    // Here are the actual allocated memory, need to be deleted
+    // if((mem = kalloc()) == 0)
+    //   goto err;
+    // memmove(mem, (char*)pa, PGSIZE);
+
+    // if (mappages(new, i, PGSIZE, (uint64)mem, flags) != 0)
+    // {
+    //   kfree(mem);
+    //   goto err;
+    // }
+    if (mappages(new, i, PGSIZE, (uint64)pa, flags) != 0){
+      // There is no mapping of the virtual address `i` to the newly allocated physical address `mem`
+      // Instead, it is mapped to the physical memory pa of the parent process
+      printf("uvmcopy failed\n");
       goto err;
     }
+    add_ref((void *)pa); // Increments reference count for this physical address by 1
   }
   return 0;
 
@@ -362,6 +379,12 @@ int copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
   while (len > 0)
   {
     va0 = PGROUNDDOWN(dstva);
+    if (is_unallocated_COW(pagetable, va0)){ // For handlingg kernel page fault
+      if (alloc_COW(pagetable, va0) < 0)
+      {
+        return -1;
+      }
+    }
     pa0 = walkaddr(pagetable, va0);
     if (pa0 == 0)
       return -1;
