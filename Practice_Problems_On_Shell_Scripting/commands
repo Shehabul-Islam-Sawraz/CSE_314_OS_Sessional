@@ -1,0 +1,157 @@
+2022-11-22 CSE 314 online class on shell scripts
+
+
+date                        -> shows current time
+which name-of-a-command     -> shows the file path of the command
+
+echo $PATH                  -> shows all the paths that the shell knows
+
+
+pwd                         -> (print working directory)
+
+
+
+::LIST::
+ls                          -> list the files and folders of the current directory
+                               possible when user has read permission on the current directory
+ls -l                       -> list the files and folders with more details, like the permission of a file
+ls -l file-name             -> detailes of the file name
+ls directory-name           -> list the files and folders of the argument directory
+
+ls -a                       -> list the hidden files too
+ls -1                       -> list the files, each in a new line
+ls -a -1                    -> does both
+ls -a1                      -> does both (this method doesn't always work, such as in gcc it won't work)
+
+
+
+::MAKE DIRECTORY::
+mkdir new-folder-name       -> makes new folder/directory
+mkdir dir1 dir2 dir3        -> makes 3 new folders
+
+
+
+::CHANGE DIRECTORY::
+cd directory-name           -> changes the current directory into the argument/mouse click
+cd ~                        -> change the directory to /Home
+cd -                        -> change to the previous working directory
+cd .                        -> doesnt do anything. changes directory to the current directory
+cd ..                       -> go back one directory
+
+
+::REMOVE::
+rm file-name.extension      -> removes the file
+rm -r dir-name              -> removes the folder and all the subfolders
+rm -ri dir-name             -> asks for confirmation before removing the directory
+
+
+
+::MOVE::
+mv file-name.ext dir-name   -> moves file to directory (similar to cut on windows)
+mv file1.ext  file2.ext     -> renames file1 to file2
+
+
+::COPY::
+cp dir/file.ext .           -> copies file.ext from dir to current directory
+
+
+
+::CREATE NEW FILE::
+touch filename.extension    -> can change the timestamp of the file. creates a new file as a side effect
+touch .filename.extension   -> creates a hidden file. can't be seen with ls
+
+
+
+::PRINTING FILE CONTENTS IN CONSOLE::
+concatanation
+cat file1 file2             -> concats contents of file1 with file2 and prints the to console
+cat file1                   -> concats contents of file1 and nothing. useful to print file1
+
+head -n3 file.extension     -> prints first 3 lines of file
+tail -n4 file.extension     -> prints last 4 lines of file.
+
+
+
+::I/O REDIRECTION::
+
+suppose we have a program that can sum two numbers.
+if we compile with "g++ sum.cpp" we will get an a.out file
+doing ./a.out will run the program with keyboard as the input and console as the output
+we can change the input device from keyboard to a file so that the a.out file reads 2 numbers
+from the file and prints their sum.
+to do this, write
+
+./a.out < in.txt
+now the input will be recieved from in.txt file.
+
+./a.out < in.txt > out.txt
+in.txt is input and output printed to out.txt. no need to create out.txt seperately.
+
+./a.out < in.txt >> out.txt
+appends output to out.txt
+
+
+
+
+::PIPELINE::
+This allows us to chain commands, like a pipe.
+cat out.txt                 -> prints contents of out.txt to console
+wc -l out.txt               -> counts the number of lines in out.txt
+cat out.txt | wc -l         -> counts the number of lines in out.txt
+
+print the third line of a text file
+cat file.txt | head -n3 | tail -n1
+
+
+
+::GREP::
+grep pattern file-name.ext  -> finds and prints the lines that contains the pattern
+grep -i pattern file-name.ext -> same job but ignores case.
+grep -v pattern file-name.ext -> finds and prints the lines that DOESN'T CONTAIN the pattern.
+
+
+
+
+::VARIABLE ACCESSING::
+x=10                        -> works
+x = 10                      -> will not work
+echo $x                     -> prints the value of x as string
+x=x+1
+echo $x                     -> will print "x+1" as string
+
+the assignment operator treats everything as string. if we want integer operation, we will use brackets
+x=10
+((x=x+1))
+echo $x                     -> will print 11, like an integer operation.
+
+
+
+::Manual::
+If we don't want to google the flags for a command, we can access the manual with this command
+
+man command-name            -> shows manual of commandname (ie. " man ls ")
+
+we can also use tldr to show the most useful flags in short.
+tldr command-name
+
+
+
+::MODIFY THE PERMISSIONS::
+chmod a+x filename          -> all users will have execution permission for the file
+chmod a-x filename          -> the permission is revoked for all users
+chmod o+r filename          -> owner has read permission;
+chmod g-w filename          -> group now doesn't have read permission
+chmod 775 filename          -> permission is set to true according to the octal of the argument
+                               rwxrwxr-x
+                               111111101
+
+
+:::: linux permissions ::::
+X | XXX | XXX | XXX
+    rwx   rwx   rwx
+    owner group any
+r allows user to ls in the directory
+w allows user to modify the directory
+x allows user to search into the directory
+
+
